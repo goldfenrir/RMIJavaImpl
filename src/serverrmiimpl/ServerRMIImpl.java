@@ -21,7 +21,7 @@ public class ServerRMIImpl extends UnicastRemoteObject implements IServices{
     /**
      * @param args the command line arguments
      */
-
+    public boolean pause=false;
     ArrayList<Integer> datos= new ArrayList<Integer>();
     public int posX=0;
     public int posY=0;
@@ -62,10 +62,28 @@ public class ServerRMIImpl extends UnicastRemoteObject implements IServices{
     }
     @Override
     public void conexionPlayer(Player p2){
+        String name="player";
+        int num=players.size()+1;
+        name+=""+num;
         Player p= new Player(p2.name,p2.posX,p2.posY,p2.map,p2.dir,p2.s);
-        if(players.size()==0) p.name="player1";
-        else p.name="player2";
         players.add(p);
+    }
+    @Override
+    public void disconnectPlayer(Player p){
+        for(int i=0;i<players.size();i++){
+            if(p.name.compareTo(players.get(i).name)==0){
+                players.remove(i);
+            }
+        }
+    }
+    
+    @Override
+    public void setpauseGame(boolean pause){
+       this.pause=pause;
+    }
+    @Override
+    public boolean getPauseState(){
+        return pause;
     }
     
 }

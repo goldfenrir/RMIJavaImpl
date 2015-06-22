@@ -21,10 +21,13 @@ public class ServerRMIImpl extends UnicastRemoteObject implements IServices{
     /**
      * @param args the command line arguments
      */
+
     ArrayList<Integer> datos= new ArrayList<Integer>();
     public int posX=0;
     public int posY=0;
     public int mapa=0;
+    ArrayList<Player> players= new ArrayList<Player>();
+    
     public ServerRMIImpl() throws RemoteException{		
     }    
     public static void main(String[] args) {
@@ -40,22 +43,27 @@ public class ServerRMIImpl extends UnicastRemoteObject implements IServices{
     }
 
     @Override
-    public void giveData(int posX2, int posY2, int mapa2) throws RemoteException {
-        posX=posX2;
-        posY=posY2;
-        mapa=mapa2;
-                        System.out.println(posX);
-                System.out.println(posY);
-                System.out.println(mapa);
+    public void giveData(Player p) throws RemoteException {
+        for(int i=0;i<players.size();i++){
+            if(p.name.compareTo(players.get(i).name)==0){//actualizo data del player
+                players.get(i).map=p.map;
+                players.get(i).posX=p.posX;
+                players.get(i).posY=p.posY;
+                break;
+            }
+        }
     }
 
     @Override
-    public ArrayList<Integer> receiveData() throws RemoteException {
-        datos.clear();
-        datos.add(posX);
-        datos.add(posY);
-        datos.add(mapa);
-        return datos;
+    public ArrayList<Player> receiveData() throws RemoteException {
+        return players;
+    }
+    @Override
+    public void conexionPlayer(Player p2){
+        Player p= new Player(p2.name,p2.posX,p2.posY,p2.map);
+        if(players.size()==0) p.name="player1";
+        else p.name="player2";
+        players.add(p);
     }
     
 }

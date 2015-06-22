@@ -49,6 +49,8 @@ public class ServerRMIImpl extends UnicastRemoteObject implements IServices{
                 players.get(i).map=p.map;
                 players.get(i).posX=p.posX;
                 players.get(i).posY=p.posY;
+                players.get(i).dir=p.dir;
+                players.get(i).s=p.s;
                 break;
             }
         }
@@ -60,7 +62,7 @@ public class ServerRMIImpl extends UnicastRemoteObject implements IServices{
     }
     @Override
     public void conexionPlayer(Player p2){
-        Player p= new Player(p2.name,p2.posX,p2.posY,p2.map);
+        Player p= new Player(p2.name,p2.posX,p2.posY,p2.map,p2.dir,p2.s);
         if(players.size()==0) p.name="player1";
         else p.name="player2";
         players.add(p);

@@ -21,6 +21,7 @@ public class ServerRMIImpl extends UnicastRemoteObject implements IServices{
     /**
      * @param args the command line arguments
      */
+    public boolean startedGame = false;
     public boolean pause=false;
     ArrayList<Integer> datos= new ArrayList<Integer>();
     public int posX=0;
@@ -62,13 +63,17 @@ public class ServerRMIImpl extends UnicastRemoteObject implements IServices{
         return players;
     }
     @Override
-    public void conexionPlayer(Player p2){
-        String name="player";
-        int num=players.size()+1;
-        name+=""+num;
-        Player p= new Player(p2.name,p2.posX,p2.posY,p2.map,p2.dir,p2.s);
-        players.add(p);
-        listosFalso.add(false);
+    public boolean conexionPlayer(Player p2){
+        if(!startedGame){
+            String name="player";
+            int num=players.size()+1;
+            name+=""+num;
+            Player p= new Player(p2.name,p2.posX,p2.posY,p2.map,p2.dir,p2.s);
+            players.add(p);
+            listosFalso.add(false);
+            return true;
+        }
+        return false;
     }
     @Override
     public void disconnectPlayer(Player p){
@@ -95,8 +100,10 @@ public class ServerRMIImpl extends UnicastRemoteObject implements IServices{
     
     @Override
     public boolean todosListos(){
-        if(listosVerdadero.size() == listosFalso.size())
+        if(listosVerdadero.size() == listosFalso.size()){
+            startedGame = true;
             return true;
+        }
         else
             return false;
     }

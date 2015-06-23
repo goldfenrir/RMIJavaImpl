@@ -27,7 +27,8 @@ public class ServerRMIImpl extends UnicastRemoteObject implements IServices{
     public int posY=0;
     public int mapa=0;
     ArrayList<Player> players= new ArrayList<Player>();
-    
+    private ArrayList<Boolean> listosFalso = new ArrayList<Boolean>(); 
+    private ArrayList<Boolean> listosVerdadero = new ArrayList<Boolean>(); 
     public ServerRMIImpl() throws RemoteException{		
     }    
     public static void main(String[] args) {
@@ -67,6 +68,7 @@ public class ServerRMIImpl extends UnicastRemoteObject implements IServices{
         name+=""+num;
         Player p= new Player(p2.name,p2.posX,p2.posY,p2.map,p2.dir,p2.s);
         players.add(p);
+        listosFalso.add(false);
     }
     @Override
     public void disconnectPlayer(Player p){
@@ -86,4 +88,17 @@ public class ServerRMIImpl extends UnicastRemoteObject implements IServices{
         return pause;
     }
     
+    @Override
+    public void agregarListo(){
+        listosVerdadero.add(true);
+    }
+    
+    @Override
+    public boolean todosListos(){
+        if(listosVerdadero.size() == listosFalso.size())
+            return true;
+        else
+            return false;
+    }
+   
 }

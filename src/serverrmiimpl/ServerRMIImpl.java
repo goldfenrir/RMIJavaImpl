@@ -5,12 +5,15 @@
  */
 package serverrmiimpl;
 
+import static java.lang.Thread.sleep;
 import java.rmi.registry.LocateRegistry;
 import java.rmi.RemoteException;
 import java.rmi.registry.LocateRegistry;
 import java.rmi.registry.Registry;
 import java.rmi.server.UnicastRemoteObject;
 import java.util.ArrayList;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import serverrmi.IServices;
 /**
  *
@@ -18,11 +21,35 @@ import serverrmi.IServices;
  */
 public class ServerRMIImpl extends UnicastRemoteObject implements IServices{
 
+
+
     /**
      * @param args the command line arguments
      */
+    public class ThreadTime extends Thread{
+  
+        public int time=10;
+        public boolean corre=true;
+        public ThreadTime(){
+
+            corre=true;
+        }
+        public void run(){
+            corre=true;
+            while (corre){
+                time--;
+                try {
+                    sleep(1000);
+                } catch (InterruptedException ex) {
+                    Logger.getLogger(ThreadTime.class.getName()).log(Level.SEVERE, null, ex);
+                }
+            }		
+        }
+    }
+    public ThreadTime hilo;
     public boolean startedGame = false;
     public boolean pause=false;
+    public boolean finGame=false;
     ArrayList<Integer> datos= new ArrayList<Integer>();
     public int posX=0;
     public int posY=0;
@@ -109,5 +136,25 @@ public class ServerRMIImpl extends UnicastRemoteObject implements IServices{
         else
             return false;
     }
-   
+    @Override
+    public void setFinGame(boolean b) {
+        if(b){
+            hilo = new ThreadTime();
+            hilo.start();
+        }
+        else{
+            hilo.time=10;
+            hilo.corre=false;
+        }
+         finGame=b;
+    }
+
+    @Override
+    public boolean getFinGame()  {
+       return finGame;
+    }    
+    @Override
+    public int getTime()  {
+       return hilo.time;
+    }      
 }

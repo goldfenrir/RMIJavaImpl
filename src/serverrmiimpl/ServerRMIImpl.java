@@ -53,6 +53,7 @@ public class ServerRMIImpl extends UnicastRemoteObject implements IServices{
                 players.get(i).posY=p.posY;
                 players.get(i).dir=p.dir;
                 players.get(i).s=p.s;
+                players.get(i).numberofFriends=p.numberofFriends;
                 break;
             }
         }
